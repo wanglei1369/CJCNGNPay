@@ -22,11 +22,22 @@ namespace FlutterwavePayment
                     string headerValue = ConfigurationManager.AppSettings["headerValue"];
                     string resString = HttpRequest.HttpGet(endPoint,headerKey,headerValue);
                     var responseData = new JObject();
+                    string status = "false";
                     if (!string.IsNullOrEmpty(resString))
                     {
-                        responseData = JObject.Parse(resString);
+                        try
+                        {
+                            responseData = JObject.Parse(resString);
+                            status = responseData["status"].ToString();
+                        }
+                        catch (Exception ex)
+                        {
+                            Response.Write( "false");
+                        }
+
+                        
                     }                    
-                    string status = responseData["status"].ToString();
+                    
                     if (status == "success")
                     {
                         string strData = responseData["data"].ToString();

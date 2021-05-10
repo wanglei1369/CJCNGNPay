@@ -249,30 +249,18 @@ namespace PaymentBackend
         {
             try
             {
-                //create psot request
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                var request = WebRequest.Create(url);
                 request.Method = "GET";
                 request.ContentType = "application/json;charset=UTF-8";
                 request.Headers[headerKey] = headerValue;
-/*                byte[] payload = Encoding.UTF8.GetBytes(data);
-                request.ContentLength = payload.Length;
+                var webResponse = request.GetResponse();
+                var webStream = webResponse.GetResponseStream();
 
-                //send post request
-                Stream writer = request.GetRequestStream();
-                writer.Write(payload, 0, payload.Length);
-                writer.Close();*/
+                var reader = new StreamReader(webStream);
+                var data = reader.ReadToEnd();
 
-                //get response
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream stream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-                string value = reader.ReadToEnd();
 
-                reader.Close();
-                stream.Close();
-                response.Close();
-
-                return value;
+               return data;
             }
             catch (Exception ex)
             {
